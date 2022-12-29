@@ -1,7 +1,15 @@
-package com.example.test.employee;
+package com.example.test.managers;
+
+import com.example.test.days.Day;
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import javax.validation.constraints.Min;
@@ -10,7 +18,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name= "managers")
-public class Employee {
+public class Manager {
 	@Column(name = "id")
 	@Id
 	private Long id;
@@ -28,13 +36,17 @@ public class Employee {
 	@Min(1)
 	private int salary;
 	
-	public Employee(){}
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="manager", cascade = CascadeType.ALL)
+    private List<Day> days;
 	
-	public Employee(Long id, String surname, String name, int salary) {
+	public Manager(){}
+	
+	public Manager(Long id, String surname, String name, int salary, List<Day> days) {
 		this.id = id;
 		this.surname = surname;
 		this.name = name;
 		this.salary = salary;
+		this.days = days;
 		
 	}
 
@@ -67,7 +79,16 @@ public class Employee {
 	}
 	
 	public void setSalary(int salary) {
-		this.salary = salary	;
+		this.salary = salary;
 	}
+	
+	public List<Day> getDays()
+    {
+        return days;
+    }
 
+    public void setDays(List<Day> days)
+    {
+        this.days = days;
+    }
 }

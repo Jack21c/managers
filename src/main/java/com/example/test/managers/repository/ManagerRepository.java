@@ -1,0 +1,9 @@
+package com.example.test.managers.repository;
+
+import com.example.test.managers.Manager;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ManagerRepository extends JpaRepository<Manager, Long> {
+
+}

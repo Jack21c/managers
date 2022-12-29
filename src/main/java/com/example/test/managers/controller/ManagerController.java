@@ -1,7 +1,4 @@
-package com.example.test.employee.controller;
-
-import com.example.test.employee.Employee;
-import com.example.test.employee.repository.EmployeesRepository;
+package com.example.test.managers.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,30 +13,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.test.managers.Manager;
+import com.example.test.managers.repository.ManagerRepository;
+
 @RestController
-public class EmployeeController {
+public class ManagerController {
 	@Autowired
-	EmployeesRepository employeesRepository;
+	ManagerRepository managerRepository;
 	   
 	// Получить все записи
 	@GetMapping("/managers")
-    public List<Employee> getAllNotes() {
-		List<Employee> allNotes = new ArrayList<>();
-	    employeesRepository.findAll().forEach(allNotes::add);
+    public List<Manager> getAllNotes() {
+		List<Manager> allNotes = new ArrayList<>();
+	    managerRepository.findAll().forEach(allNotes::add);
 	    return allNotes;
 	}
 	
 	// Создать запись
 	@PostMapping("/managers")
-	public Employee createNote(@Valid @RequestBody Employee employee) {
-	    return employeesRepository.save(employee);
+	public Manager createNote(@Valid @RequestBody Manager manager) {
+	    return managerRepository.save(manager);
 	}
 	  
 	// Получить запись по id
 	@GetMapping("/managers/{id}")
-	public Optional<Employee> getNoteById(@PathVariable(value = "id") Long id) {
-		if(employeesRepository.existsById(id))
-			return employeesRepository.findById(id);
+	public Optional<Manager> getNoteById(@PathVariable(value = "id") Long id) {
+		if(managerRepository.existsById(id))
+			return managerRepository.findById(id);
 		return Optional.empty();
 	    
 	}
