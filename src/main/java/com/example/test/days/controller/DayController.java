@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.test.days.Day;
 import com.example.test.days.repository.DayRepository;
 import com.example.test.managers.Manager;
+import com.example.test.managers.repository.ManagerRepository;
 
 @RestController
 public class DayController {
 	@Autowired
 	DayRepository dayRepository;
+	ManagerRepository managerRepository;
 	   
 	// Получить все записи
 	@GetMapping("/days")
@@ -40,28 +42,29 @@ public class DayController {
 	}
 	  
 	// Получить запись по id
-		@GetMapping("/days/{id}")
-		public Optional<Day> getNoteById(@PathVariable(value = "id") Long id) {
-			if(dayRepository.existsById(id))
-				return dayRepository.findById(id);
-			return Optional.empty(); 
+	@GetMapping("/days/{id}")
+	public Optional<Day> getNoteById(@PathVariable(value = "id") Long id) {
+		if(dayRepository.existsById(id))
+			return dayRepository.findById(id);
+		return Optional.empty(); 
 	}
 		
-	// Получить запись по manager
-		@GetMapping("/days/manager/{manager_id}")
+	// Получить запись по manager_id
+	@GetMapping("/days/manager/{manager_id}")
 	public List<Day> getNotesByManager(@PathVariable(value = "manager_id") Long manager_id) {
 		List<Day> notes = new ArrayList<>();
 		dayRepository.findByManagerId(manager_id).forEach(notes::add);
 		return notes;
-	    
 	}
-	
 	
 	// Получить количество звонков менеджера в данный период
 	@GetMapping("/days/manager/{manager_id}/firstDate/{first_date}/lastDate/{last_date}")
 	public int getNoteByManagerFromFirstDateToLastDate(@PathVariable(value = "manager_id") Long manager_id, 
 			@PathVariable(value = "first_date") Date first_date, @PathVariable(value = "last_date") Date last_date) {
-		return dayRepository.sumCallsByManagerInPeriod(first_date, last_date, manager_id);
+		if(managerRepository.existsById(manager_id))
+			return dayRepository.sumCallsByManagerInPeriod(first_date, last_date, manager_id);
+		return 0;
+		
 	    
 	}
 	

@@ -1,6 +1,7 @@
 package com.example.test.managers.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.test.history_bonuses.HistoryBonuses;
+import com.example.test.history_bonuses.repository.HistoryBonusesRepository;
 import com.example.test.managers.Manager;
 import com.example.test.managers.repository.ManagerRepository;
 
@@ -20,6 +23,7 @@ import com.example.test.managers.repository.ManagerRepository;
 public class ManagerController {
 	@Autowired
 	ManagerRepository managerRepository;
+	HistoryBonusesRepository historyBonusesRepository;
 	   
 	// Получить все записи
 	@GetMapping("/managers")
@@ -40,8 +44,30 @@ public class ManagerController {
 	public Optional<Manager> getNoteById(@PathVariable(value = "id") Long id) {
 		if(managerRepository.existsById(id))
 			return managerRepository.findById(id);
-		return Optional.empty();
-	    
+		return Optional.empty(); 
 	}
-
+	
+	// Получить ЗП по id
+	@GetMapping("/managers/salary/{id}")
+	public int getSalaryById(@PathVariable(value = "id") Long id) {
+		if(managerRepository.existsById(id))
+			return managerRepository.salaryById(id);
+		return 0;
+	}
+	
+	//Получить итоговую ЗП по id
+	@GetMapping("/managers/reward/{id}")
+	public int getSumRewardById(@PathVariable(value = "id") Long id) {
+		if(managerRepository.existsById(id))
+			return historyBonusesRepository.sumRewardByManagerId(id);
+		return 0;
+	}
+	
+	//Получить историю начисления бонусов по id
+	@GetMapping("/managers/history_bonuses/{id}")
+	public List<HistoryBonuses> getHistoryBonusesById(@PathVariable(value = "id") Long id) {
+		if(managerRepository.existsById(id))
+			return historyBonusesRepository.findByManagerId(id);
+		return Collections.emptyList();
+	}
 }

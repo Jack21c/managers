@@ -12,11 +12,19 @@ import org.springframework.data.repository.query.Param;
 public interface HistoryBonusesRepository extends JpaRepository<HistoryBonuses, Long> {
 	/*
 	@Query(value = "select * from "
-			+ "select acct.sclientacctid,acct.sacctdesc,acct.slocation,invest.sinvestigatorname, dept.sclientdeptid,dept.sdeptname,acp.sccpcode\r\n"
 			+ "       from history_bonuses hb join acct.department dept join acct.investigator invest join acct.accountCPC acp\r\n"
 			+ "       where acct.nInstID= :instId\r\n"
 			+ "       order by acct.sclientacctid", nativeQuery = true)
-    public List findByAge(@Param("first_date") Date first_date, @Param("last_date") Date last_date, @Param("manager_id") Long manager_id);
+    public List createNoteFromTimePeriod(@Param("first_date") Date first_date, @Param("last_date") Date last_date, @Param("manager_id") Long manager_id);
     */
+	
+	@Query(value = "select * from history_bonuses"
+			+ "where manager_id = :manager_id", nativeQuery = true)
+	List<HistoryBonuses> findByManagerId(@Param("manager_id") Long manager_id);
+	
+	
+	@Query(value = "select sum(reward) from history_bonuses"
+			+ "where manager_id = :manager_id", nativeQuery = true)
+	int sumRewardByManagerId(@Param("manager_id") Long manager_id);
 
 }

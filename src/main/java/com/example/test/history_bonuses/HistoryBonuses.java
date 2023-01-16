@@ -81,12 +81,12 @@ public class HistoryBonuses {
 		this.manager = manager;
 	}
 	
-	public Bonus getDays()
+	public Bonus getBonus()
     {
         return bonus;
     }
 
-    public void setDays(Bonus bonus)
+    public void setBonus(Bonus bonus)
     {
         this.bonus = bonus;
     }
