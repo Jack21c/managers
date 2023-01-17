@@ -8,9 +8,11 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,9 +91,26 @@ public class HistoryBonusesController {
 			return historyBonusesRepository.save(hb);
 	    return hb;
 	}
+	
+	// Обновляем запись по id
+	@PutMapping("/historyBonuses/update/{id}")
+	public boolean updateNote(@PathVariable(value = "id") Long id, @Valid @RequestBody HistoryBonuses historyBonuses) {
+		if(historyBonusesRepository.existsById(id)) {
+			historyBonuses.setId(id);
+			historyBonusesRepository.save(historyBonuses);
+			return true;
+		}
+	    return false;
+	}
+	
+	// Удалить запись по id
+	@DeleteMapping("/historyBonuses/delete/{id}")
+	public void deleteNote(@PathVariable(value = "id") Long id) {
+		historyBonusesRepository.deleteById(id);
+	}	
 		
 	// Получить запись по id
-	@GetMapping("/historyBonuses/{id}")
+	@GetMapping("/historyBonuses/read/{id}")
 	public Optional<HistoryBonuses> getNoteById(@PathVariable(value = "id") Long id) {
 		if(historyBonusesRepository.existsById(id))
 			return historyBonusesRepository.findById(id);

@@ -8,9 +8,11 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,9 +40,26 @@ public class ManagerController {
 	public Manager createNote(@Valid @RequestBody Manager manager) {
 	    return managerRepository.save(manager);
 	}
+	
+	// Обновляем запись по id
+	@PutMapping("/managers/update/{id}")
+	public boolean updateNote(@PathVariable(value = "id") Long id, @Valid @RequestBody Manager manager) {
+		if(managerRepository.existsById(id)) {
+			manager.setId(id);
+			managerRepository.save(manager);
+			return true;
+		}
+	    return false;
+	}
+	
+	// Удалить запись по id
+	@DeleteMapping("/managers/delete/{id}")
+	public void deleteNote(@PathVariable(value = "id") Long id) {
+	    managerRepository.deleteById(id);
+	}
 	  
 	// Получить запись по id
-	@GetMapping("/managers/{id}")
+	@GetMapping("/managers/read/{id}")
 	public Optional<Manager> getNoteById(@PathVariable(value = "id") Long id) {
 		if(managerRepository.existsById(id))
 			return managerRepository.findById(id);
